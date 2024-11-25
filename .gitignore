@@ -1,0 +1,31 @@
+cat > .gitignore << 'EOL'
+# Python
+__pycache__/
+*.py[cod]
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+*.egg-info/
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
+
+# Cache
+.cache/
+EOL.env

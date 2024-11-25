@@ -1,0 +1,24 @@
+name: llm-api-interface
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.12
+  - pip
+  - numpy
+  - pandas
+  - pytest
+  - black
+  - flake8
+  - mypy
+  - pip:
+    - langchain
+    - asyncio
+    - fastapi
+    - pydantic
+    - python-dotenv
+    - rich
+    - typer
+    - uvicorn
+    - anthropic
+    - openai

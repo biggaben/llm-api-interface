@@ -39,7 +39,7 @@
 │   │   │   ├── __init__.py
 │   ├── docker/
 │   │   ├── __init__.py
-│   ├── docs/
+│   ├── doc/
 │   │   ├── __init__.py
 │   │   ├── api/
 │   │   │   ├── api-documentation.md
@@ -47,6 +47,7 @@
 │   │   ├── guides/
 │   │   │   ├── quick-start-guides.md
 │   │   │   ├── __init__.py
+│   │   ├── api-documentation.yml
 │   ├── interfaces/
 │   │   ├── __init__.py
 │   │   ├── cli/

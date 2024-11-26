@@ -5,7 +5,7 @@ A robust Python interface for managing multiple LLM APIs with intelligent model 
 ## Features
 
 - **Multiple Model Support**:
-  - Claude-3 Sonnet
+  - Claude-3-5-sonnet
   - GPT-4o
   - o1-preview
 

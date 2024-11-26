@@ -2,7 +2,7 @@
 import pytest
 from pathlib import Path
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 import time
 from utils.cache.manager import CacheManager
 from config.settings import Settings
@@ -64,7 +64,7 @@ class TestCacheManager:
         key = cache_manager._get_cache_key(model, messages)
         cache_path = cache_manager._get_cache_path(key)
         data = {
-            "cached_at": datetime.utcnow().isoformat(),
+            "cached_at": datetime.now(timezone.utc).isoformat(),
             "model": model,
             "messages": messages,
             "response": response
@@ -75,7 +75,7 @@ class TestCacheManager:
         assert cache_manager.get(model, messages) == response
         
         # Wait for expiration
-        time.sleep(1.5)  # Increased sleep time for reliability
+        time.sleep(1.5)
         
         # Should be expired
         assert cache_manager.get(model, messages) is None
@@ -99,7 +99,7 @@ class TestCacheManager:
         # Set cache entry with old timestamp
         key = cache_manager._get_cache_key(model, messages)
         cache_path = cache_manager._get_cache_path(key)
-        old_time = datetime.utcnow() - timedelta(hours=2)
+        old_time = datetime.now(timezone.utc) - timedelta(hours=2)
         
         data = {
             "cached_at": old_time.isoformat(),

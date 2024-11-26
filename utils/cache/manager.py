@@ -3,7 +3,7 @@ import json
 import hashlib
 from pathlib import Path
 from typing import Optional, Any, Dict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 class CacheManager:
     """Manage caching of API responses."""
@@ -29,7 +29,6 @@ class CacheManager:
     
     def get(self, model: str, messages: list) -> Optional[Dict[str, Any]]:
         """Get cached response if available and not expired."""
-        # Early return if cache is disabled
         if not getattr(self.settings, "CACHE_ENABLED", True):
             return None
             
@@ -43,8 +42,8 @@ class CacheManager:
             data = json.loads(cache_path.read_text())
             cached_time = datetime.fromisoformat(data["cached_at"])
             
-            # Use UTC for comparison
-            if cached_time + timedelta(seconds=self.settings.CACHE_TTL) < datetime.utcnow():
+            # Compare with current UTC time
+            if cached_time + timedelta(seconds=self.settings.CACHE_TTL) < datetime.now(timezone.utc):
                 cache_path.unlink()  # Remove expired cache
                 return None
                 
@@ -61,7 +60,7 @@ class CacheManager:
         cache_path = self._get_cache_path(key)
         
         data = {
-            "cached_at": datetime.utcnow().isoformat(),
+            "cached_at": datetime.now(timezone.utc).isoformat(),
             "model": model,
             "messages": messages,
             "response": response
@@ -72,7 +71,7 @@ class CacheManager:
     def clear(self, age_hours: Optional[int] = None):
         """Clear cache, optionally only entries older than age_hours."""
         if age_hours is not None:
-            cutoff = datetime.now() - timedelta(hours=age_hours)
+            cutoff = datetime.now(timezone.utc) - timedelta(hours=age_hours)
             for cache_file in self.cache_dir.glob("*.json"):
                 try:
                     data = json.loads(cache_file.read_text())

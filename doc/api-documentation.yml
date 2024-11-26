@@ -1,0 +1,235 @@
+openapi: 3.0.0
+
+info:
+
+  title: LLM API Interface
+
+  version: 1.0.0
+
+  description: API documentation for LLM API Interface, detailing available endpoints and models.
+
+
+
+paths:
+
+  /generate:
+
+    post:
+
+      summary: Generate a response using a specified model
+
+      requestBody:
+
+        required: true
+
+        content:
+
+          application/json:
+
+            schema:
+
+              $ref: '#/components/schemas/GenerateRequest'
+
+      responses:
+
+        "200":
+
+          description: Successful response
+
+          content:
+
+            application/json:
+
+              schema:
+
+                $ref: '#/components/schemas/GenerateResponse'
+
+
+
+  /stream-response:
+
+    post:
+
+      summary: Stream a response using a specified model
+
+      requestBody:
+
+        required: true
+
+        content:
+
+          application/json:
+
+            schema:
+
+              $ref: '#/components/schemas/StreamRequest'
+
+      responses:
+
+        "200":
+
+          description: Streaming response
+
+          content:
+
+            application/json:
+
+              schema:
+
+                $ref: '#/components/schemas/StreamResponse'
+
+
+
+  /models:
+
+    get:
+
+      summary: Retrieve a list of available models
+
+      responses:
+
+        "200":
+
+          description: List of models
+
+          content:
+
+            application/json:
+
+              schema:
+
+                $ref: '#/components/schemas/ModelsResponse'
+
+
+
+components:
+
+  schemas:
+
+    ModelType:
+
+      type: string
+
+      enum:
+
+        - GPT4O
+
+        - CLAUDE
+
+        - O1_PREVIEW
+
+    Message:
+
+      type: object
+
+      properties:
+
+        role:
+
+          type: string
+
+          description: Role of the message sender (e.g., user, assistant).
+
+        content:
+
+          type: string
+
+          description: Content of the message.
+
+      required:
+
+        - role
+
+        - content
+
+    GenerateRequest:
+
+      type: object
+
+      properties:
+
+        model_type:
+
+          $ref: '#/components/schemas/ModelType'
+
+        messages:
+
+          type: array
+
+          items:
+
+            $ref: '#/components/schemas/Message'
+
+        max_tokens:
+
+          type: integer
+
+          description: Maximum number of tokens to generate.
+
+      required:
+
+        - model_type
+
+        - messages
+
+    GenerateResponse:
+
+      type: object
+
+      properties:
+
+        response:
+
+          type: string
+
+          description: Generated response content.
+
+    StreamRequest:
+
+      type: object
+
+      properties:
+
+        model_type:
+
+          $ref: '#/components/schemas/ModelType'
+
+        messages:
+
+          type: array
+
+          items:
+
+            $ref: '#/components/schemas/Message'
+
+      required:
+
+        - model_type
+
+        - messages
+
+    StreamResponse:
+
+      type: object
+
+      properties:
+
+        response_chunk:
+
+          type: string
+
+          description: Streamed response chunks.
+
+    ModelsResponse:
+
+      type: object
+
+      properties:
+
+        models:
+
+          type: array
+
+          items:
+
+            $ref: '#/components/schemas/ModelType'
